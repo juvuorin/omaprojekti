@@ -1,24 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react'
+//import './App.css';
+// lukumäärä???
+
 
 function App() {
+  //array destructuring 
+  const [bruttopalkka, setBruttopalkka] = useState(0)
+  const [veroprosentti, setVeroprosentti] = useState(0)
+  const [veronmäärä, setVeronmäärä] = useState(0)
+
+  const nappiaPainettu = () => {
+
+    let vero = bruttopalkka * veroprosentti / 100
+    setVeronmäärä(vero);
+  }
+  const palkkaMuuttunut = (event) => {
+    setBruttopalkka(event.target.value)
+    //   console.log("Teksti on muuttunut")
+  }
+  const veroprosMuuttunut = (event) => {
+    setVeroprosentti(event.target.value)
+    // setTeksti(event.target.value)
+    //     console.log("Teksti on muuttunut")
+  }
+
+  //JSX  //angular
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <button onClick={nappiaPainettu}>Laske veron määrä</button>
+      <input onChange={(event) => palkkaMuuttunut(event)} value={bruttopalkka}></input>
+      <input onChange={(event) => veroprosMuuttunut(event)} value={veroprosentti}></input>
+      <p>{veronmäärä}</p>
     </div>
   );
 }
