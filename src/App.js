@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react'
 //import './App.css';
 // lukumäärä???
@@ -6,33 +6,51 @@ import { useState } from 'react'
 
 function App() {
   //array destructuring 
-  const [bruttopalkka, setBruttopalkka] = useState(0)
-  const [veroprosentti, setVeroprosentti] = useState(0)
-  const [veronmäärä, setVeronmäärä] = useState(0)
 
-  const nappiaPainettu = () => {
+  
+  const [nappula,setNappulat]=useState(["Jarno","Pekka","Jarno","Pekka","Jarno","Pekka","Jarno","Pekka","Jarno","Pekka","Jarno","Pekka","Jarno","Pekka"])  
+  const [osaNappuloista,setOsanappuloista]=useState([])  
 
-    let vero = bruttopalkka * veroprosentti / 100
-    setVeronmäärä(vero);
-  }
-  const palkkaMuuttunut = (event) => {
-    setBruttopalkka(event.target.value)
-    //   console.log("Teksti on muuttunut")
-  }
-  const veroprosMuuttunut = (event) => {
-    setVeroprosentti(event.target.value)
-    // setTeksti(event.target.value)
-    //     console.log("Teksti on muuttunut")
+  const nappulaPainettu = (index)=>()=>{
+    console.log("ok")
+    let uusiLista = nappula.concat([nappula[index]])
+    setNappulat(uusiLista)
+
+
   }
 
+
+ const onkoJarno=(x)=> {
+
+    if (x=="Jarno") {
+      return true
+    } else {
+      return false
+    }
+ }
+
+  const painikePainettu = ()=>{
+
+    let listaJossaVainJarnot = nappula.filter(item=>item=="Jarno")
+    setOsanappuloista(listaJossaVainJarnot)    
+
+  }
+  const nimiMuuttui = (event,index)=>{
+    let uusiLista = [...nappula]
+    uusiLista[index] = event.target.value
+    console.log(event.target.value)
+    setNappulat(uusiLista)
+  }
   //JSX  //angular
   return (
-    <div>
-      <button onClick={nappiaPainettu}>Laske veron määrä</button>
-      <input onChange={(event) => palkkaMuuttunut(event)} value={bruttopalkka}></input>
-      <input onChange={(event) => veroprosMuuttunut(event)} value={veroprosentti}></input>
-      <p>{veronmäärä}</p>
-    </div>
+    <div >
+      {nappula.map((item,index)=><input key={index} onChange={(event)=>nimiMuuttui(event,index)}value={item}></input>)}
+
+{/*       {nappula.map((nappula,index)=><button key={index} onClick={nappulaPainettu(index)}>{nappula}</button>)}
+      <button onClick={painikePainettu}>Näytä vain Jarnot</button> 
+      
+      {osaNappuloista.length==0 ? "Ei ole vielä suodatettu Jarnoja" : osaNappuloista.map((nappula,index)=><button key={index} onClick={nappulaPainettu(index)}>{nappula}</button>)}
+ */}    </div>
   );
 }
 
