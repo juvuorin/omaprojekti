@@ -1,106 +1,78 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react'
-import { DataGrid } from '@material-ui/data-grid';
 
 //import './App.css';
 // lukumäärä???
 
 
+//let u = {0:"pekka",1:"leena"}
+
 function App() {
   //array destructuring 
-const [rows,setRows]=useState([
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-])
-  
+  //let lapset = [{lapsenNimi:"Lissa"},{lapsenNimi:"Kaapo"}] 
+  const [data, setData]=useState([])
+  //const [sukunimi, setSukunimi]=useState("")???
 
+  const initialData =[
+    {etunimi: "Pekka", sukunimi:"Jakamo",ikä:29, jälkikasvu: [{lapsenNimi:"Lissa", nimet:{ensimmäinen_nimi:"Lissa", toinen_nimi:"Riitta"}},
+    {lapsenNimi:"Kaapo"}] },
+    {etunimi: "Jarmo", sukunimi:"Jakamo",ikä:49}]
 
-//  const [nappula,setNappulat]=useState(["Jarno","Pekka","Jarno","Pekka","Jarno","Pekka","Jarno","Pekka","Jarno","Pekka","Jarno","Pekka","Jarno","Pekka"])  
-  
-const [osaNappuloista,setOsanappuloista]=useState([])  
-const [valitut, setValitut]=useState([]);
-const [selection, setSelection] = React.useState([]);
+  const [selected, setSelected] =useState([])  
+// localSotragen data-avaimena on "data"
+useEffect(()=>{
 
-  const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'firstName', headerName: 'First name', width: 130 },
-    { field: 'lastName', headerName: 'Last name', width: 130 },
-    {
-      field: 'age',
-      headerName: 'Age',
-      type: 'number',
-      width: 90,
-    },
-    {
-      field: 'fullName',
-      headerName: 'Full name',
-      description: 'This column has a value getter and is not sortable.',
-      sortable: false,
-      width: 160,
-      valueGetter: (params) =>
-        `${params.getValue('firstName') || ''} ${
-          params.getValue('lastName') || ''
-        }`,
-    },
-  ];
+  let jemma = window.localStorage;
+  let tempData = jemma.getItem("data")
+  if (!tempData) {
+    jemma.setItem("data",JSON.stringify(initialData))
+    tempData=initialData
+  }
+  setData(JSON.parse(tempData)); 
+ 
+},
+[])
+useEffect(()=>{
+
+  window.localStorage.setItem("data",JSON.stringify(data))
+ 
+},
+[data])
+
 
   const painikePainettu = ()=>{
 
-    setRows([]);
+    let uusdata = JSON.parse(JSON.stringify(data));
+//    let uusdata = [...data];
+
+ //   uusdata[0].jälkikasvu[0].lapsenNimi="Mikko"
+   // let uusdata = [...data];
+    let lopullinenData = data.concat(uusdata)
+    setData(lopullinenData)
+    //setRows([]);
   }
+  const näytäJälkikasvu=(item)=>{
+    if (item.jälkikasvu!==undefined){
+      return item.jälkikasvu.map(alkio=><div>{alkio.lapsenNimi}</div>)
 
-
-  /* const nappulaPainettu = (index)=>()=>{
-    console.log("ok")
-    let uusiLista = nappula.concat([nappula[index]])
-    setNappulat(uusiLista)
-
-
-  }
- */
-
-/*  const onkoJarno=(x)=> {
-
-    if (x=="Jarno") {
-      return true
-    } else {
-      return false
     }
- }
+  }
+  const sukunimiMuuttui=(event,index)=>{
 
-  const painikePainettu = ()=>{
-
-    let listaJossaVainJarnot = nappula.filter(item=>item=="Jarno")
-    setOsanappuloista(listaJossaVainJarnot)    
+    let syväKopio = JSON.parse(JSON.stringify(data))
+    syväKopio[index].sukunimi=event.target.value;
+    setData(syväKopio)
 
   }
-  const nimiMuuttui = (event,index)=>{
-    let uusiLista = [...nappula]
-    uusiLista[index] = event.target.value
-    console.log(event.target.value)
-    setNappulat(uusiLista)
-  }
- */  //JSX  //angular
- const omaf=()=>{
-   console.log("valittiin jotain listalta")
- }
+
   return (<div>
-    <div style={{ height: 400, width: '100%' }}>
-{/*       {nappula.map((item,index)=><input key={index} onChange={(event)=>nimiMuuttui(event,index)}value={item}></input>)}
- */}      <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection onSelectionChange={omaf} />
-       
-{/*       {nappula.map((nappula,index)=><button key={index} onClick={nappulaPainettu(index)}>{nappula}</button>)}
-      <button onClick={painikePainettu}>Näytä vain Jarnot</button> 
-      
-      {osaNappuloista.length==0 ? "Ei ole vielä suodatettu Jarnoja" : osaNappuloista.map((nappula,index)=><button key={index} onClick={nappulaPainettu(index)}>{nappula}</button>)}
- */}     </div><div><button onClick={painikePainettu}>Tyhjää lista</button></div></div>
+
+    {data.map((item, index)=><div><input onChange={(event)=>sukunimiMuuttui(event,index)}value={item.sukunimi}></input> {item.etunimi} {item.ikä}
+    {näytäJälkikasvu(item)}
+    
+    </div>)}
+    <button onClick={painikePainettu}> Paina minua</button>
+    </div>
   );
 }
 
