@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react'
-
+import LapsiLista from './LapsiLista'
 //import './App.css';
 // lukumäärä???
 
@@ -26,10 +26,19 @@ function App() {
 
     let jemma = window.localStorage;
     let tempData = JSON.parse(jemma.getItem("data"))
-    if (!tempData) {
+    if (tempData==null) {
       jemma.setItem("data", JSON.stringify(initialData))
       tempData = initialData
-    }
+    } else {
+    if (tempData.lenght==0) {
+      jemma.setItem("data", JSON.stringify(initialData))
+      tempData = initialData
+      
+    }}
+    /* if (tempData.length==0 || tempData==null) {
+      jemma.setItem("data", JSON.stringify(initialData))
+      tempData = initialData
+    } */
     setData(tempData);
 
   },
@@ -82,10 +91,13 @@ function App() {
 
   return (<div>
 
-    {data.map((item, index) => <div key={index}><input onChange={(event) => sukunimiMuuttui(event, index)} value={item.sukunimi}></input> {item.etunimi} {item.ikä}
-      {näytäJälkikasvu(index)}
+    {data.map((item, index) => <div key={index}>
+      <input onChange={(event) => sukunimiMuuttui(event, index)} value={item.sukunimi}>
+      </input> {item.etunimi} {item.ikä}
+      {item.jälkikasvu? <LapsiLista lapsenNimiMuuttui={lapsenNimiMuuttui} parentIndex={index} lapsiLista={item.jälkikasvu}></LapsiLista>:""}
+      </div>)}
 
-    </div>)}
+    
     <button onClick={painikePainettu}> Paina minua</button>
   </div>
   );
