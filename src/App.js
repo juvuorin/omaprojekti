@@ -25,12 +25,12 @@ function App() {
   useEffect(() => {
 
     let jemma = window.localStorage;
-    let tempData = jemma.getItem("data")
+    let tempData = JSON.parse(jemma.getItem("data"))
     if (!tempData) {
       jemma.setItem("data", JSON.stringify(initialData))
       tempData = initialData
     }
-    setData(JSON.parse(tempData));
+    setData(tempData);
 
   },
     [])
@@ -55,11 +55,11 @@ function App() {
   }
   const näytäJälkikasvu = (index) => {
     if (data[index].jälkikasvu !== undefined) {
-      return data[index].jälkikasvu.map((alkio, lapsenIndex) => 
-      <div key={lapsenIndex}>
-        <input onChange={(e) => {lapsenNimiMuuttui(e, index, lapsenIndex) }} value={alkio.lapsenNimi}>
-        </input>
-      </div>)
+      return data[index].jälkikasvu.map((alkio, lapsenIndex) =>
+        <div key={lapsenIndex}>
+          <input onChange={(e) => { lapsenNimiMuuttui(e, index, lapsenIndex) }} value={alkio.lapsenNimi}>
+          </input>
+        </div>)
 
     }
   }
