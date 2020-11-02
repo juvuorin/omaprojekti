@@ -11,6 +11,8 @@ function App() {
   //array destructuring 
   //let lapset = [{lapsenNimi:"Lissa"},{lapsenNimi:"Kaapo"}] 
   const [data, setData] = useState([])
+  const [dataAlustettu, setDataAlustettu] = useState(false)
+
   //const [sukunimi, setSukunimi]=useState("")???
 
   const initialData = [
@@ -21,34 +23,24 @@ function App() {
     { etunimi: "Jarmo", sukunimi: "Jakamo", ikä: 49 }]
 
   const [selected, setSelected] = useState([])
-  // localSotragen data-avaimena on "data"
+  
   useEffect(() => {
 
     let jemma = window.localStorage;
     let tempData = JSON.parse(jemma.getItem("data"))
-    if (tempData==null) {
+    if (tempData == null) {
       jemma.setItem("data", JSON.stringify(initialData))
       tempData = initialData
-    } else {
-    if (tempData.lenght==0) {
-      jemma.setItem("data", JSON.stringify(initialData))
-      tempData = initialData
-      
-    }}
-    /* if (tempData.length==0 || tempData==null) {
-      jemma.setItem("data", JSON.stringify(initialData))
-      tempData = initialData
-    } */
+    } 
     setData(tempData);
+    setDataAlustettu(true)
+  }, [])
 
-  },
-    [])
   useEffect(() => {
-
-    window.localStorage.setItem("data", JSON.stringify(data))
-
-  },
-    [data])
+    if (dataAlustettu) {
+      window.localStorage.setItem("data", JSON.stringify(data))
+    }
+  }, [data])
 
 
   const painikePainettu = () => {
@@ -86,17 +78,17 @@ function App() {
     setData(syväKopio)
 
   }
-  
+
 
   return (<div>
 
     {data.map((item, index) => <div key={index}>
       <input onChange={(event) => sukunimiMuuttui(event, index)} value={item.sukunimi}>
       </input> {item.etunimi} {item.ikä}
-      {item.jälkikasvu? <LapsiLista lapsenNimiMuuttui={lapsenNimiMuuttui} parentIndex={index} lapsiLista={item.jälkikasvu}></LapsiLista>:""}
-      </div>)}
+      {item.jälkikasvu ? <LapsiLista lapsenNimiMuuttui={lapsenNimiMuuttui} parentIndex={index} lapsiLista={item.jälkikasvu}></LapsiLista> : ""}
+    </div>)}
 
-    
+
     <button onClick={painikePainettu}> Paina minua</button>
   </div>
   );
