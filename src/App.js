@@ -78,7 +78,6 @@ function App() {
     syväKopio[vanhemmanIndex].jälkikasvu[lapsenIndex].lapsenNimi = event.target.value;
     setData(syväKopio)
 
-
   }
   const sukunimiMuuttui = (event, index) => {
 
@@ -87,7 +86,7 @@ function App() {
     setData(syväKopio)
 
   }
-
+  
 
   return (<div>
 
