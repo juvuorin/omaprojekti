@@ -10,70 +10,84 @@ import { useState } from 'react'
 function App() {
   //array destructuring 
   //let lapset = [{lapsenNimi:"Lissa"},{lapsenNimi:"Kaapo"}] 
-  const [data, setData]=useState([])
+  const [data, setData] = useState([])
   //const [sukunimi, setSukunimi]=useState("")???
 
-  const initialData =[
-    {etunimi: "Pekka", sukunimi:"Jakamo",ikä:29, jälkikasvu: [{lapsenNimi:"Lissa", nimet:{ensimmäinen_nimi:"Lissa", toinen_nimi:"Riitta"}},
-    {lapsenNimi:"Kaapo"}] },
-    {etunimi: "Jarmo", sukunimi:"Jakamo",ikä:49}]
+  const initialData = [
+    {
+      etunimi: "Pekka", sukunimi: "Jakamo", ikä: 29, jälkikasvu: [{ lapsenNimi: "Lissa", nimet: { ensimmäinen_nimi: "Lissa", toinen_nimi: "Riitta" } },
+      { lapsenNimi: "Kaapo" }]
+    },
+    { etunimi: "Jarmo", sukunimi: "Jakamo", ikä: 49 }]
 
-  const [selected, setSelected] =useState([])  
-// localSotragen data-avaimena on "data"
-useEffect(()=>{
+  const [selected, setSelected] = useState([])
+  // localSotragen data-avaimena on "data"
+  useEffect(() => {
 
-  let jemma = window.localStorage;
-  let tempData = jemma.getItem("data")
-  if (!tempData) {
-    jemma.setItem("data",JSON.stringify(initialData))
-    tempData=initialData
-  }
-  setData(JSON.parse(tempData)); 
- 
-},
-[])
-useEffect(()=>{
+    let jemma = window.localStorage;
+    let tempData = jemma.getItem("data")
+    if (!tempData) {
+      jemma.setItem("data", JSON.stringify(initialData))
+      tempData = initialData
+    }
+    setData(JSON.parse(tempData));
 
-  window.localStorage.setItem("data",JSON.stringify(data))
- 
-},
-[data])
+  },
+    [])
+  useEffect(() => {
+
+    window.localStorage.setItem("data", JSON.stringify(data))
+
+  },
+    [data])
 
 
-  const painikePainettu = ()=>{
+  const painikePainettu = () => {
 
     let uusdata = JSON.parse(JSON.stringify(data));
-//    let uusdata = [...data];
+    //    let uusdata = [...data];
 
- //   uusdata[0].jälkikasvu[0].lapsenNimi="Mikko"
-   // let uusdata = [...data];
+    //   uusdata[0].jälkikasvu[0].lapsenNimi="Mikko"
+    // let uusdata = [...data];
     let lopullinenData = data.concat(uusdata)
     setData(lopullinenData)
     //setRows([]);
   }
-  const näytäJälkikasvu=(item)=>{
-    if (item.jälkikasvu!==undefined){
-      return item.jälkikasvu.map(alkio=><div>{alkio.lapsenNimi}</div>)
+  const näytäJälkikasvu = (index) => {
+    if (data[index].jälkikasvu !== undefined) {
+      return data[index].jälkikasvu.map((alkio, lapsenIndex) => 
+      <div key={lapsenIndex}>
+        <input onChange={(e) => {lapsenNimiMuuttui(e, index, lapsenIndex) }} value={alkio.lapsenNimi}>
+        </input>
+      </div>)
 
     }
   }
-  const sukunimiMuuttui=(event,index)=>{
+  const lapsenNimiMuuttui = (event, vanhemmanIndex, lapsenIndex) => {
 
     let syväKopio = JSON.parse(JSON.stringify(data))
-    syväKopio[index].sukunimi=event.target.value;
+    syväKopio[vanhemmanIndex].jälkikasvu[lapsenIndex].lapsenNimi = event.target.value;
+    setData(syväKopio)
+
+
+  }
+  const sukunimiMuuttui = (event, index) => {
+
+    let syväKopio = JSON.parse(JSON.stringify(data))
+    syväKopio[index].sukunimi = event.target.value;
     setData(syväKopio)
 
   }
- 
+
 
   return (<div>
 
-    {data.map((item, index)=><div><input onChange={(event)=>sukunimiMuuttui(event,index)}value={item.sukunimi}></input> {item.etunimi} {item.ikä}
-    {näytäJälkikasvu(item)}
-    
+    {data.map((item, index) => <div key={index}><input onChange={(event) => sukunimiMuuttui(event, index)} value={item.sukunimi}></input> {item.etunimi} {item.ikä}
+      {näytäJälkikasvu(index)}
+
     </div>)}
     <button onClick={painikePainettu}> Paina minua</button>
-    </div>
+  </div>
   );
 }
 
