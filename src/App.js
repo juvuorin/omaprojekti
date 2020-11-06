@@ -78,18 +78,52 @@ function App() {
     setData(syväKopio)
 
   }
+  const etunimiMuuttui = (event, index) => {
+
+    let syväKopio = JSON.parse(JSON.stringify(data))
+    syväKopio[index].etunimi = event.target.value;
+    setData(syväKopio)
+
+  }
+
+  const ikäMuuttui = (event, index) => {
+
+    let syväKopio = JSON.parse(JSON.stringify(data))
+    syväKopio[index].ikä = event.target.value;
+    setData(syväKopio)
+
+  }
+  const lisääHenkilö = () => {
+    let syväKopio = JSON.parse(JSON.stringify(data))
+    let uusiHenkilö= {etunimi: "", sukunimi: "", ikä: 0}
+    syväKopio.push(uusiHenkilö) 
+    setData(syväKopio)
+  }
+  const poistaHenkilö = (index) => {
+    let syväKopio = JSON.parse(JSON.stringify(data))
+    syväKopio.splice(index,1)
+    setData(syväKopio)
+  }
 
 
   return (<div>
 
     {data.map((item, index) => <div key={index}>
-      <input onChange={(event) => sukunimiMuuttui(event, index)} value={item.sukunimi}>
-      </input> {item.etunimi} {item.ikä}
+    <input onChange={(event) => etunimiMuuttui(event, index)}
+        value={item.etunimi}> 
+      </input>
+      <input onChange={(event) => sukunimiMuuttui(event, index)}
+        value={item.sukunimi}>
+      </input>
+      <input onChange={(event) => ikäMuuttui(event, index)}
+         value={item.ikä}>
+      </input>
+      <button onClick={()=>poistaHenkilö(index)}>Poista henkilö</button>
       {item.jälkikasvu ? <LapsiLista lapsenNimiMuuttui={lapsenNimiMuuttui} parentIndex={index} lapsiLista={item.jälkikasvu}></LapsiLista> : ""}
     </div>)}
 
 
-    <button onClick={painikePainettu}> Paina minua</button>
+    <button onClick={lisääHenkilö}>Lisää henkilö</button>
   </div>
   );
 }
