@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react'
 import LapsiLista from './LapsiLista'
+import uuid from 'react-uuid'
 //import './App.css';
 // lukumäärä???
 
@@ -17,10 +18,10 @@ function App() {
 
   const initialData = [
     {
-      etunimi: "Pekka", sukunimi: "Jakamo", ikä: 29, jälkikasvu: [{ lapsenNimi: "Lissa", nimet: { ensimmäinen_nimi: "Lissa", toinen_nimi: "Riitta" } },
+      uid:uuid(),etunimi: "Pekka", sukunimi: "Jakamo", ikä: 29, jälkikasvu: [{ uid:uuid(),lapsenNimi: "Lissa", nimet: { ensimmäinen_nimi: "Lissa", toinen_nimi: "Riitta" } },
       { lapsenNimi: "Kaapo" }]
     },
-    { etunimi: "Jarmo", sukunimi: "Jakamo", ikä: 49 }]
+    { uid:uuid(),etunimi: "Jarmo", sukunimi: "Jakamo", ikä: 49 }]
 
   const [selected, setSelected] = useState([])
   
@@ -95,7 +96,7 @@ function App() {
   }
   const lisääHenkilö = () => {
     let syväKopio = JSON.parse(JSON.stringify(data))
-    let uusiHenkilö= {etunimi: "", sukunimi: "", ikä: 0}
+    let uusiHenkilö= {uid:uuid(),etunimi: "", sukunimi: "", ikä: 0}
     syväKopio.push(uusiHenkilö) 
     setData(syväKopio)
   }
