@@ -58,7 +58,7 @@ function App() {
   const näytäJälkikasvu = (index) => {
     if (data[index].jälkikasvu !== undefined) {
       return data[index].jälkikasvu.map((alkio, lapsenIndex) =>
-        <div key={lapsenIndex}>
+        <div key={alkio.uid}>
           <input onChange={(e) => { lapsenNimiMuuttui(e, index, lapsenIndex) }} value={alkio.lapsenNimi}>
           </input>
         </div>)
@@ -109,7 +109,7 @@ function App() {
 
   return (<div>
 
-    {data.map((item, index) => <div key={index}>
+    {data.map((item, index) => <div key={item.uid}>
     <input onChange={(event) => etunimiMuuttui(event, index)}
         value={item.etunimi}> 
       </input>
