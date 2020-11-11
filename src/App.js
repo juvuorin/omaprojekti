@@ -27,12 +27,15 @@ function App() {
   
   useEffect(() => {
 
+
+    
+/* 
     let jemma = window.localStorage;
     let tempData = JSON.parse(jemma.getItem("data"))
     if (tempData == null) {
       jemma.setItem("data", JSON.stringify(initialData))
       tempData = initialData
-    } 
+    } */ 
     setData(tempData);
     setDataAlustettu(true)
   }, [])
