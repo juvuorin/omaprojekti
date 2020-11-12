@@ -1,13 +1,13 @@
 {
     "ihmiset": [
         {
-            "uid": 1,
+            "id": 1,
             "etunimi": "Pekka",
             "sukunimi": "Jakamo",
             "ikä": 29,
-            "jälkikasvu": [
+            "jalkikasvu": [
                 {
-                    "uid": 1,
+                    "id": 1,
                     "lapsenNimi": "Lissa",
                     "nimet": {
                         "ensimmäinen_nimi": "Lissa",

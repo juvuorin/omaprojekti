@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react'
 import LapsiLista from './LapsiLista'
 import uuid from 'react-uuid'
+import axios from 'axios';
 //import './App.css';
 // lukumäärä???
 
@@ -16,36 +17,78 @@ function App() {
 
   //const [sukunimi, setSukunimi]=useState("")???
 
-  const initialData = [
+  const initialData =
+
+  [
     {
-      uid:uuid(),etunimi: "Pekka", sukunimi: "Jakamo", ikä: 29, jälkikasvu: [{ uid:uuid(),lapsenNimi: "Lissa", nimet: { ensimmäinen_nimi: "Lissa", toinen_nimi: "Riitta" } },
-      { lapsenNimi: "Kaapo" }]
+    uid: uuid(), etunimi: "Pekka", sukunimi: "Jakamo", ikä: 29, jälkikasvu: [
+        { uid: uuid(), lapsenNimi: "Lissa", nimet: { ensimmäinen_nimi: "Lissa", toinen_nimi: "Riitta"
+          }
+        },
+        { lapsenNimi: "Kaapo"
+        }
+      ]
     },
-    { uid:uuid(),etunimi: "Jarmo", sukunimi: "Jakamo", ikä: 49 }]
+    { uid: uuid(), etunimi: "Jarmo", sukunimi: "Jakamo", ikä: 49
+    }
+  ]
+
 
   const [selected, setSelected] = useState([])
-  
+
   useEffect(() => {
 
+    const createData = async() => {
+      
+      try {
 
-    
-/* 
-    let jemma = window.localStorage;
-    let tempData = JSON.parse(jemma.getItem("data"))
-    if (tempData == null) {
-      jemma.setItem("data", JSON.stringify(initialData))
-      tempData = initialData
-    } */ 
-    setData(tempData);
-    setDataAlustettu(true)
+        let result = await axios.post("http://localhost:3005/ihmiset", initialData)
+        setData(initialData)
+        setDataAlustettu(true)
+
+      } catch (exception) {
+        alert("Tietokannan alustaminen epäonnistui")
+      }
+    }
+
+    const fetchData = async () => {
+      try {
+        let result = await axios.get("http://localhost:3005/ihmiset")
+        if (result.data.length > 0) {
+          setData(result.data);
+          setDataAlustettu(true)
+        } else {
+          throw ("Nyt pitää data kyllä alustaa!")
+        }
+      }
+      catch (exception) {
+        createData();
+        console.log(exception)
+      }
+    }
+    fetchData();
   }, [])
 
   useEffect(() => {
+    const updateData = async () => {
+      try {
+        let result = await axios.put("http://localhost:3005/ihmiset", data)
+      } catch (exception) {
+        console.log("Datab päivitys ei onnistunut")
+      }
+    }
+  
     if (dataAlustettu) {
-      window.localStorage.setItem("data", JSON.stringify(data))
+      updateData();
     }
   }, [data])
-
+   
+  //   if (dataAlustettu) {
+  //PUT
+  //     window.localStorage.setItem("data", JSON.stringify(data))
+  //   }
+  // }, [data])
+  //*/
 
   const painikePainettu = () => {
 
@@ -99,13 +142,13 @@ function App() {
   }
   const lisääHenkilö = () => {
     let syväKopio = JSON.parse(JSON.stringify(data))
-    let uusiHenkilö= {uid:uuid(),etunimi: "", sukunimi: "", ikä: 0}
-    syväKopio.push(uusiHenkilö) 
+    let uusiHenkilö = { uid: uuid(), etunimi: "", sukunimi: "", ikä: 0 }
+    syväKopio.push(uusiHenkilö)
     setData(syväKopio)
   }
   const poistaHenkilö = (index) => {
     let syväKopio = JSON.parse(JSON.stringify(data))
-    syväKopio.splice(index,1)
+    syväKopio.splice(index, 1)
     setData(syväKopio)
   }
 
@@ -113,16 +156,16 @@ function App() {
   return (<div>
 
     {data.map((item, index) => <div key={item.uid}>
-    <input onChange={(event) => etunimiMuuttui(event, index)}
-        value={item.etunimi}> 
+      <input onChange={(event) => etunimiMuuttui(event, index)}
+        value={item.etunimi}>
       </input>
       <input onChange={(event) => sukunimiMuuttui(event, index)}
         value={item.sukunimi}>
       </input>
       <input onChange={(event) => ikäMuuttui(event, index)}
-         value={item.ikä}>
+        value={item.ikä}>
       </input>
-      <button onClick={()=>poistaHenkilö(index)}>Poista henkilö</button>
+      <button onClick={() => poistaHenkilö(index)}>Poista henkilö</button>
       {item.jälkikasvu ? <LapsiLista lapsenNimiMuuttui={lapsenNimiMuuttui} parentIndex={index} lapsiLista={item.jälkikasvu}></LapsiLista> : ""}
     </div>)}
 
