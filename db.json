@@ -1,13 +1,13 @@
 {
   "ihmiset": [
     {
-      "uid": "7f773c-7e0a-06cf-76b5-20f60e4877be",
-      "etunimi": "Pekka",
+      "uid": "7d1c5ac-6fd2-63e6-13c6-761311e15fe",
+      "etunimi": "PekkaR",
       "sukunimi": "Jakamo",
       "ikä": 29,
       "jälkikasvu": [
         {
-          "uid": "774e8ee-8ea-744-0a57-da02d7572c7",
+          "uid": "ab20be-ba3-b4e1-4b20-2d4a64c17fd",
           "lapsenNimi": "Lissa",
           "nimet": {
             "ensimmäinen_nimi": "Lissa",
@@ -20,16 +20,10 @@
       ]
     },
     {
-      "uid": "22825-6843-0840-73a-b5a61cadb0d",
+      "uid": "3af47d2-bf65-7860-3868-b3854308723f",
       "etunimi": "Jarmo",
       "sukunimi": "Jakamo",
       "ikä": 49
-    },
-    {
-      "uid": "10a13c-54c3-8e86-1b4-ce47786644c",
-      "etunimi": "",
-      "sukunimi": "",
-      "ikä": 0
     }
   ]
 }
