@@ -52,15 +52,56 @@ function reducer(state, action) {
   }
 }
 
+
 function App() {
   //array destructuring 
   //let lapset = [{lapsenNimi:"Lissa"},{lapsenNimi:"Kaapo"}] 
   //const [data, setData] = useState([])
+
   const [dataAlustettu, setDataAlustettu] = useState(false)
   const [state, dispatch] = useReducer(reducer, []);
   //const [sukunimi, setSukunimi]=useState("")???
 
   const [selected, setSelected] = useState([])
+  id=45
+
+  try {
+    let result = await axios.get("http://localhost:4000/lähetäoppilaillesähköpostit/",???)
+    if (result.data.length > 0) {
+      dispatch({ type: "EXAM_FETCHED", data: result.data })
+      //          setData(result.data);
+      setDataAlustettu(true)
+    } else {
+      throw ("Nyt pitää data kyllä alustaa!")
+    }
+  }
+  catch (exception) {
+    createData();
+    console.log(exception)
+  }
+}
+const fn=()=>{
+
+  tentti ={nimi: "tentti2",pvm:"20.09.2020"}
+  let id=9
+  try {
+    let result = await axios.put("http://localhost:4000/tentit/"+id,{tentti})
+    if (result.data.length > 0) {
+      dispatch({ type: "INIT_DATA", data: result.data })
+      //          setData(result.data);
+      setDataAlustettu(true)
+    } else {
+      throw ("Nyt pitää data kyllä alustaa!")
+    }
+  }
+  catch (exception) {
+    createData();
+    console.log(exception)
+  }
+}
+
+
+}
 
   useEffect(() => {
 
@@ -80,7 +121,7 @@ function App() {
 
     const fetchData = async () => {
       try {
-        let result = await axios.get("http://localhost:3005/ihmiset")
+        let result = await axios.get("http://localhost:4000/tentit")
         if (result.data.length > 0) {
           dispatch({ type: "INIT_DATA", data: result.data })
           //          setData(result.data);
